@@ -8,10 +8,12 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { CreateUserHandler } from './repository/commands/handlers/create-user.handler';
 import { GetUsersHandler } from './repository/queries/handlers/get-users.handler';
 import { GetUserByIdHandler } from './repository/queries/handlers/get-user-by-id.handler';
+import { RedisCacheModule } from 'src/config/redis.config';
 
 @Module({
   imports: [
     CqrsModule,
+    RedisCacheModule,
     MikroOrmModule.forFeature([User]),
     ClientsModule.register([
       {

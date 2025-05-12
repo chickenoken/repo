@@ -6,6 +6,7 @@ import { KafkaModule } from './kafka/kafka.module';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import mikroOrmConfig from './config/mikro-orm.config';
 import { UsersModule } from './modules/user/user.module';
+import { RedisCacheModule } from './config/redis.config';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { UsersModule } from './modules/user/user.module';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
     }),
+    RedisCacheModule,
     KafkaModule,
     UsersModule
   ],
