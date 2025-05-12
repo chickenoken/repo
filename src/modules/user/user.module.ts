@@ -9,11 +9,13 @@ import { CreateUserHandler } from './repository/commands/handlers/create-user.ha
 import { GetUsersHandler } from './repository/queries/handlers/get-users.handler';
 import { GetUserByIdHandler } from './repository/queries/handlers/get-user-by-id.handler';
 import { RedisCacheModule } from 'src/config/redis.config';
+import { QueueModule } from '../queue/queue.module';
 
 @Module({
   imports: [
     CqrsModule,
     RedisCacheModule,
+    QueueModule,
     MikroOrmModule.forFeature([User]),
     ClientsModule.register([
       {

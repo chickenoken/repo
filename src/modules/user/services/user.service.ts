@@ -4,6 +4,7 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { User } from '../entities/user.entity';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
+import { UserQueueService } from '../../queue/services/user-queue.service';
 
 @Injectable()
 export class UserService {
@@ -12,6 +13,7 @@ export class UserService {
     private readonly userRepository: EntityRepository<User>,
     private readonly em: EntityManager,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private readonly userQueueService: UserQueueService,
   ) {}
 
   async findAll(): Promise<User[]> {
@@ -38,6 +40,7 @@ export class UserService {
     
     if (user) {
       await this.cacheManager.set(cacheKey, user);
+      await this.userQueueService.addProcessUserDataJob(id);
     }
     
     return user;
@@ -63,6 +66,11 @@ export class UserService {
     const cacheKey = `user_${user.user_id}`;
     await this.cacheManager.set(cacheKey, user);
     await this.cacheManager.set(`user_email_${user.email}`, user);
+    
+    await this.userQueueService.addSendWelcomeEmailJob({
+      email: user.email,
+      firstName: user.firstName,
+    });
     
     return user;
   }
