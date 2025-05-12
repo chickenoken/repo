@@ -1,0 +1,22 @@
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { Module } from '@nestjs/common';
+import { GraphQLModule } from '@nestjs/graphql';
+import { join } from 'path';
+import { KafkaModule } from './kafka/kafka.module';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
+import mikroOrmConfig from './config/mikro-orm.config';
+import { UsersModule } from './modules/user/user.module';
+
+@Module({
+  imports: [
+    MikroOrmModule.forRoot(mikroOrmConfig),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      sortSchema: true,
+    }),
+    KafkaModule,
+    UsersModule
+  ],
+})
+export class AppModule {}

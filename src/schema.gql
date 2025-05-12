@@ -1,0 +1,21 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Mutation {
+  createUser(email: String!, firstName: String!, lastName: String!, password: String!): User!
+}
+
+type Query {
+  getUserById(id: Int!): User
+  getUsers: [User!]!
+}
+
+type User {
+  createdAt: Int!
+  email: String!
+  firstName: String!
+  lastLogin: Int
+  lastName: String!
+  user_id: ID!
+}
