@@ -15,7 +15,6 @@ export class UserQueueService {
     @InjectQueue('user-queue') private readonly userQueue: Queue,
   ) {}
 
-  // Add a job to create a user
   async addCreateUserJob(userData: {
     email: string;
     password: string;
@@ -31,19 +30,17 @@ export class UserQueueService {
     });
   }
 
-  // Send welcome email job
   async addSendWelcomeEmailJob(user: { email: string; firstName: string }) {
     return this.userQueue.add(UserQueueJobs.SEND_WELCOME_EMAIL, user, {
-      delay: 5000, // 5 seconds delay to ensure user is fully created
+      delay: 5000, 
       attempts: 5,
       backoff: {
         type: 'exponential',
-        delay: 10000, // 10 seconds
+        delay: 10000,
       },
     });
   }
 
-  // Process user data (example of a background job)
   async addProcessUserDataJob(userId: number) {
     return this.userQueue.add(UserQueueJobs.PROCESS_USER_DATA, { userId }, {
       priority: 5,
@@ -51,7 +48,6 @@ export class UserQueueService {
     });
   }
 
-  // Get queue metrics
   async getQueueMetrics() {
     const [jobs, completed, failed, delayed, waiting, active] = await Promise.all([
       this.userQueue.getJobs(['completed', 'failed', 'delayed', 'waiting', 'active']),

@@ -17,7 +17,7 @@ export class UserQueueProcessor {
       return { success: true };
     } catch (error) {
       this.logger.error(`Failed to process job ${job.id}`, error.stack);
-      throw error; // Re-throw to let Bull know the job failed
+      throw error;
     }
   }
 
@@ -28,10 +28,8 @@ export class UserQueueProcessor {
     try {
       const { email, firstName } = job.data;
       
-      // In a real app, you would integrate with an email service
       this.logger.log(`Sending welcome email to ${email}`);
       
-      // Simulate email sending
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       this.logger.debug(`Welcome email sent to ${email}`);

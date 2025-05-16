@@ -14,20 +14,18 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
   ) {}
 
   async execute(command: CreateUserCommand) {
-    const { email, password, firstName, lastName } = command;
+    const { userEmail, userPassword, userFirstName, userLastName } = command;
     
-    // For immediate response, create user directly
     const user = await this.userService.create({ 
-      email, 
-      password, 
-      firstName, 
-      lastName 
+      userEmail, 
+      userPassword, 
+      userFirstName, 
+      userLastName 
     });
     
-    // Queue additional processing
-    await this.userQueueService.addProcessUserDataJob(user.user_id);
+    await this.userQueueService.addProcessUserDataJob(user.userId);
     
-    this.logger.log(`User created and queued for additional processing: ${user.user_id}`);
+    this.logger.log(`User created and queued for additional processing: ${user.userId}`);
     
     return user;
   }

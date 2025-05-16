@@ -6,9 +6,7 @@ export class KafkaController {
   @MessagePattern('test-topic')
   handleTestTopic(@Payload() message: any) {
     console.log('Received message:', message.value);
-    // Process your message here
     
-    // Return a response (for request-response pattern)
     return { processed: true };
   }
 }

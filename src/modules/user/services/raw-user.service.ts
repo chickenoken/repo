@@ -94,7 +94,7 @@ export class RawUserService {
   }): Promise<any> {
     try {
       const connection = this.em.getConnection();
-      const userId = uuidv4(); // Generate a UUID or use another ID generation method
+      const userId = uuidv4();
       const now = new Date();
       
       const query = `
@@ -111,13 +111,12 @@ export class RawUserService {
       await connection.execute(query, [
         userId,
         data.email,
-        data.password, // In a real app, hash this password!
+        data.password,
         data.firstName,
         data.lastName,
         now
       ]);
       
-      // Return the created user
       return {
         user_id: userId,
         user_email: data.email,
@@ -132,8 +131,6 @@ export class RawUserService {
       throw new Error(`Failed to create user: ${error.message}`);
     }
   }
-
-  // Additional utility methods for advanced querying
 
   async searchUsersRaw(searchTerm: string, limit = 10): Promise<any[]> {
     try {

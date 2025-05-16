@@ -1,9 +1,9 @@
 import { Resolver, Query, Args, Mutation, Int } from '@nestjs/graphql';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { User } from '../entities/user.entity';
 import { GetUsersQuery } from '../repository/queries/get-user-by-id.query';
 import { GetUserByIdQuery } from '../repository/queries/get-users.query';
 import { CreateUserCommand } from '../repository/commands/create-user.command';
+import { UserDto } from 'src/modules/dto/users.dto';
 
 @Resolver()
 export class UsersResolver {
@@ -12,25 +12,25 @@ export class UsersResolver {
     private readonly queryBus: QueryBus,
   ) {}
 
-  @Query(() => [User])
+  @Query(() => [UserDto])
   async getUsers() {
     return this.queryBus.execute(new GetUsersQuery());
   }
 
-  @Query(() => User, { nullable: true })
+  @Query(() => UserDto, { nullable: true })
   async getUserById(@Args('id', { type: () => Int }) id: number) {
     return this.queryBus.execute(new GetUserByIdQuery(id));
   }
 
-  @Mutation(() => User)
+  @Mutation(() => UserDto)
   async createUser(
-    @Args('email') email: string,
-    @Args('password') password: string,
-    @Args('firstName') firstName: string,
-    @Args('lastName') lastName: string,
+    @Args('userEmail') userEmail: string,
+    @Args('userPassword') userPassword: string,
+    @Args('userFirstName') userFirstName: string,
+    @Args('userLastName') userLastName: string,
   ) {
     return this.commandBus.execute(
-      new CreateUserCommand(email, password, firstName, lastName),
+      new CreateUserCommand(userEmail, userPassword, userFirstName, userLastName),
     );
   }
 }

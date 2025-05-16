@@ -3,19 +3,19 @@
 # ------------------------------------------------------
 
 type Mutation {
-  createUser(email: String!, firstName: String!, lastName: String!, password: String!): User!
+  createUser(userEmail: String!, userFirstName: String!, userLastName: String!, userPassword: String!): UserDto!
 }
 
 type Query {
-  getUserById(id: Int!): User
-  getUsers: [User!]!
+  getUserById(id: Int!): UserDto
+  getUsers: [UserDto!]!
 }
 
-type User {
-  createdAt: Int!
-  email: String!
-  firstName: String!
-  lastLogin: Int
-  lastName: String!
-  user_id: ID!
+type UserDto {
+  userCreated: Int
+  userEmail: String!
+  userFirstName: String
+  userId: Int!
+  userLastLogin: Int
+  userLastName: String
 }
