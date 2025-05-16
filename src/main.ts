@@ -5,9 +5,9 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
-  
+
   const app = await NestFactory.create(AppModule);
-  
+
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.KAFKA,
     options: {
@@ -20,15 +20,15 @@ async function bootstrap() {
       },
     },
   });
-  
+
   await app.startAllMicroservices();
   logger.log('Kafka microservice started');
-  
+
   await app.listen(3000);
   logger.log(`Application is running on: ${await app.getUrl()}`);
 }
 
-bootstrap().catch(err => {
+bootstrap().catch((err) => {
   console.error('Error starting application:', err);
   process.exit(1);
 });

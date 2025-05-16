@@ -11,9 +11,7 @@ export enum UserQueueJobs {
 
 @Injectable()
 export class UserQueueService {
-  constructor(
-    @InjectQueue('user-queue') private readonly userQueue: Queue,
-  ) {}
+  constructor(@InjectQueue('user-queue') private readonly userQueue: Queue) {}
 
   async addCreateUserJob(userData: {
     email: string;
@@ -32,7 +30,7 @@ export class UserQueueService {
 
   async addSendWelcomeEmailJob(user: { email: string; firstName: string }) {
     return this.userQueue.add(UserQueueJobs.SEND_WELCOME_EMAIL, user, {
-      delay: 5000, 
+      delay: 5000,
       attempts: 5,
       backoff: {
         type: 'exponential',
@@ -42,21 +40,32 @@ export class UserQueueService {
   }
 
   async addProcessUserDataJob(userId: number) {
-    return this.userQueue.add(UserQueueJobs.PROCESS_USER_DATA, { userId }, {
-      priority: 5,
-      attempts: 3,
-    });
+    return this.userQueue.add(
+      UserQueueJobs.PROCESS_USER_DATA,
+      { userId },
+      {
+        priority: 5,
+        attempts: 3,
+      },
+    );
   }
 
   async getQueueMetrics() {
-    const [jobs, completed, failed, delayed, waiting, active] = await Promise.all([
-      this.userQueue.getJobs(['completed', 'failed', 'delayed', 'waiting', 'active']),
-      this.userQueue.getCompletedCount(),
-      this.userQueue.getFailedCount(),
-      this.userQueue.getDelayedCount(),
-      this.userQueue.getWaitingCount(),
-      this.userQueue.getActiveCount(),
-    ]);
+    const [jobs, completed, failed, delayed, waiting, active] =
+      await Promise.all([
+        this.userQueue.getJobs([
+          'completed',
+          'failed',
+          'delayed',
+          'waiting',
+          'active',
+        ]),
+        this.userQueue.getCompletedCount(),
+        this.userQueue.getFailedCount(),
+        this.userQueue.getDelayedCount(),
+        this.userQueue.getWaitingCount(),
+        this.userQueue.getActiveCount(),
+      ]);
 
     return {
       jobs: jobs.length,

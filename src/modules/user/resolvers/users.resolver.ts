@@ -30,7 +30,12 @@ export class UsersResolver {
     @Args('userLastName') userLastName: string,
   ) {
     return this.commandBus.execute(
-      new CreateUserCommand(userEmail, userPassword, userFirstName, userLastName),
+      new CreateUserCommand(
+        userEmail,
+        userPassword,
+        userFirstName,
+        userLastName,
+      ),
     );
   }
 }

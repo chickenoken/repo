@@ -22,10 +22,12 @@ export class UserService {
       return cachedUsers;
     }
 
-    const users = await this.userRepository.findAll({ orderBy: { userCreated: 'DESC' } });
-    
+    const users = await this.userRepository.findAll({
+      orderBy: { userCreated: 'DESC' },
+    });
+
     await this.cacheManager.set('all_users', users);
-    
+
     return users;
   }
 
@@ -37,15 +39,15 @@ export class UserService {
     }
 
     const user = await this.userRepository.findOne({ userId: id });
-    
+
     if (user) {
       await this.cacheManager.set(cacheKey, user);
       await this.userQueueService.addProcessUserDataJob(id);
     }
-    
+
     return user;
   }
-  
+
   async create(userData: {
     userEmail: string;
     userPassword: string;
@@ -60,18 +62,18 @@ export class UserService {
     user.userCreated = Math.floor(Date.now() / 1000);
 
     await this.em.persistAndFlush(user);
-    
+
     await this.cacheManager.del('all_users');
-    
+
     const cacheKey = `user_${user.userId}`;
     await this.cacheManager.set(cacheKey, user);
     await this.cacheManager.set(`user_email_${user.userEmail}`, user);
-    
+
     await this.userQueueService.addSendWelcomeEmailJob({
       email: user.userEmail,
       firstName: user.userFirstName,
     });
-    
+
     return user;
   }
 }

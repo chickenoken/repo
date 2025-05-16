@@ -20,7 +20,7 @@ import { QueueModule } from './modules/queue/queue.module';
     QueueModule,
     RedisCacheModule,
     KafkaModule,
-    UsersModule
+    UsersModule,
   ],
 })
 export class AppModule {}

@@ -20,7 +20,7 @@ export class RawUserService {
         FROM users
         ORDER BY user_created DESC
       `;
-      
+
       return await connection.execute(query);
     } catch (error) {
       console.error('Error in findAllRaw:', error);
@@ -43,13 +43,13 @@ export class RawUserService {
         FROM users
         WHERE user_id = ?
       `;
-      
+
       const results = await connection.execute(query, [id]);
-      
+
       if (results.length === 0) {
         return null;
       }
-      
+
       return results[0];
     } catch (error) {
       console.error('Error in findOneRaw:', error);
@@ -72,13 +72,13 @@ export class RawUserService {
         FROM users
         WHERE user_email = ?
       `;
-      
+
       const results = await connection.execute(query, [email]);
-      
+
       if (results.length === 0) {
         return null;
       }
-      
+
       return results[0];
     } catch (error) {
       console.error('Error in findByEmailRaw:', error);
@@ -96,7 +96,7 @@ export class RawUserService {
       const connection = this.em.getConnection();
       const userId = uuidv4();
       const now = new Date();
-      
+
       const query = `
         INSERT INTO users (
           user_id,
@@ -107,16 +107,16 @@ export class RawUserService {
           user_created
         ) VALUES (?, ?, ?, ?, ?, ?)
       `;
-      
+
       await connection.execute(query, [
         userId,
         data.email,
         data.password,
         data.firstName,
         data.lastName,
-        now
+        now,
       ]);
-      
+
       return {
         user_id: userId,
         user_email: data.email,
@@ -124,7 +124,7 @@ export class RawUserService {
         user_first_name: data.firstName,
         user_last_name: data.lastName,
         user_created: now,
-        user_last_login: null
+        user_last_login: null,
       };
     } catch (error) {
       console.error('Error in createRaw:', error);
@@ -150,13 +150,15 @@ export class RawUserService {
           user_last_name LIKE ?
         LIMIT ?
       `;
-      
+
       const searchPattern = `%${searchTerm}%`;
-      const results = await connection.execute(
-        query, 
-        [searchPattern, searchPattern, searchPattern, limit]
-      );
-      
+      const results = await connection.execute(query, [
+        searchPattern,
+        searchPattern,
+        searchPattern,
+        limit,
+      ]);
+
       return results;
     } catch (error) {
       console.error('Error in searchUsersRaw:', error);

@@ -11,7 +11,7 @@ export class UserQueueProcessor {
   async handleCreateUser(job: Job) {
     this.logger.debug(`Processing job ${job.id} of type ${job.name}`);
     this.logger.debug('Job data:', job.data);
-    
+
     try {
       this.logger.debug(`Job ${job.id} completed successfully`);
       return { success: true };
@@ -24,14 +24,14 @@ export class UserQueueProcessor {
   @Process(UserQueueJobs.SEND_WELCOME_EMAIL)
   async handleSendWelcomeEmail(job: Job) {
     this.logger.debug(`Processing welcome email job ${job.id}`);
-    
+
     try {
       const { email, firstName } = job.data;
-      
+
       this.logger.log(`Sending welcome email to ${email}`);
-      
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       this.logger.debug(`Welcome email sent to ${email}`);
       return { success: true, email };
     } catch (error) {
@@ -43,13 +43,13 @@ export class UserQueueProcessor {
   @Process(UserQueueJobs.PROCESS_USER_DATA)
   async handleProcessUserData(job: Job) {
     this.logger.debug(`Processing user data job ${job.id}`);
-    
+
     try {
       const { userId } = job.data;
-      
+
       this.logger.log(`Processing data for user ${userId}`);
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       this.logger.debug(`Data processing completed for user ${userId}`);
       return { success: true, userId };
     } catch (error) {

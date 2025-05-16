@@ -3,8 +3,8 @@ import { KafkaContext } from '@nestjs/microservices';
 
 @Catch()
 export class KafkaExceptionFilter implements ExceptionFilter {
-  catch(exception: any, host: ArgumentsHost) {
-    const ctx = host.switchToRpc().getContext<KafkaContext>();
+  catch(exception: Error, host: ArgumentsHost) {
+    const ctx = host.switchToRpc().getContext() as KafkaContext;
     const message = ctx.getMessage();
     const topic = ctx.getTopic();
     const partition = ctx.getPartition();
@@ -17,6 +17,5 @@ export class KafkaExceptionFilter implements ExceptionFilter {
       Offset: ${offset}
       Error: ${exception.message}
     `);
-
   }
 }

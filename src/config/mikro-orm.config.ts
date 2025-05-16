@@ -1,4 +1,4 @@
-import { defineConfig, UnderscoreNamingStrategy } from '@mikro-orm/mysql';
+import { defineConfig } from '@mikro-orm/mysql';
 import { join } from 'path';
 
 const mikroOrmConfig = defineConfig({
@@ -8,8 +8,8 @@ const mikroOrmConfig = defineConfig({
   password: process.env.DB_PASSWORD || 'rMfeooxf12',
   dbName: process.env.DB_NAME || 'ftn_db_main',
 
-  entities: [join(__dirname, '../modules/entities/*.js')], 
-  entitiesTs: [join(__dirname, '../modules/entities/*.ts')], 
+  entities: [join(__dirname, '../modules/entities/*.js')],
+  entitiesTs: [join(__dirname, '../modules/entities/*.ts')],
 
   discovery: {
     warnWhenNoEntities: false,

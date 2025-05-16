@@ -7,11 +7,11 @@ export class KafkaService implements OnModuleInit {
 
   async onModuleInit() {
     const topics = ['test-topic'];
-    
-    topics.forEach(topic => {
+
+    topics.forEach((topic) => {
       this.client.subscribeToResponseOf(topic);
     });
-    
+
     await this.client.connect();
   }
 
